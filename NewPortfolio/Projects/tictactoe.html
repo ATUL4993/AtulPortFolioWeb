@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --RESULT-DIALOG-WIDTH: min(85vw, 500px);
+        --NAMES-DIALOG-WIDTH: min(85vw, 700px);
+        --HEADER-WIDTH: min(90vw, 550px);
+        --GAMEBOARD-SIDE: min(90vw, 470px);
+
+        --TITLE-FS: clamp(3rem, 13vw, 4.5rem);
+        --TURN-MSG-FS: clamp(1.5rem, 10vw, 2.5rem);
+        --PLAYER-SYMBOL-FS: clamp(2rem, 15vw, 5rem);
+        --FOOTER-FS: clamp(1rem, 5vw, 1.2rem);
+        --RESULT-DIALOG-FS: clamp(1.2rem, 8vw, 2.3rem);
+
+        --LIGHT-COLOR: rgb(216, 200, 173);
+        --EXTRA-LIGHT-COLOR: rgb(230, 223, 210);
+      }
+
+      html {
+        position: relative;
+        min-height: 100vh;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color:#5271FF;
+        margin-bottom: 100px;
+        user-select: none;
+      }
+
+      /* HEADER */
+
+      header {
+        padding-top: 30px;
+        margin-bottom: 40px;
+      }
+
+      header h1 {
+        margin: 0 auto;
+        padding: 20px 0;
+        width: var(--HEADER-WIDTH);
+        text-align: center;
+        font-size: var(--TITLE-FS);
+        background-color: whitesmoke;
+        color: #333;
+        border-radius: 20px;
+      }
+
+      header h1:hover {
+        background-color: var(--EXTRA-LIGHT-COLOR);
+      }
+
+      /* MAIN */
+
+      main p {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: var(--TURN-MSG-FS);
+      }
+
+      main .gameboard {
+        width: var(--GAMEBOARD-SIDE);
+        height: var(--GAMEBOARD-SIDE);
+        margin: 0 auto;
+        margin-bottom: 30px;
+        padding: 20px;
+        border-radius: 20px;
+        background-color: whitesmoke;
+
+        display: grid;
+        gap: 3px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+      }
+
+      .gameboard .gamecell {
+        border: 2px solid black;
+        font-size: var(--PLAYER-SYMBOL-FS);
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .gameboard .gamecell:hover {
+        background-color: var(--EXTRA-LIGHT-COLOR);
+      }
+
+      main button {
+        display: block;
+        font: inherit;
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin: 0 auto;
+        padding: 20px 70px;
+        border: none;
+        border-radius: 10px;
+        background-color: var(--LIGHT-COLOR);
+        cursor: pointer;
+      }
+
+      main button:hover {
+        background-color: var(--EXTRA-LIGHT-COLOR);
+      }
+
+      /* DIALOG */
+
+      dialog {
+        position: fixed;
+        border: none;
+        border-radius: 20px;
+        user-select: none;
+      }
+
+      dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      /* --- RESULT DIALOG */
+
+      .result-dialog {
+        top: 300px;
+        left: calc(50% - (var(--RESULT-DIALOG-WIDTH) / 2));
+      }
+
+      .result-dialog h1 {
+        padding: 70px 10px;
+        width: var(--RESULT-DIALOG-WIDTH);
+        text-align: center;
+        font-size: var(--RESULT-DIALOG-FS);
+        font-weight: 700;
+      }
+
+      /* --- NAMES DIALOG */
+
+      .names-dialog {
+        top: 200px;
+        left: calc(50% - (var(--NAMES-DIALOG-WIDTH) / 2));
+      }
+
+      .names-dialog form {
+        padding: 50px 0 70px 0;
+        width: var(--NAMES-DIALOG-WIDTH);
+
+        display: grid;
+        row-gap: 50px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        justify-items: center;
+      }
+
+      .names-dialog p.title {
+        grid-column: 1 / -1;
+
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
+
+      .names-dialog p.player-name {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .names-dialog input {
+        width: 230px;
+        padding: 5px;
+        border: 2px solid #333;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .names-dialog button {
+        grid-column: 1 / -1;
+
+        margin-top: 25px;
+        padding: 25px 70px;
+        background-color: rgb(116, 233, 116);
+        border: 0.5px solid black;
+        border-radius: 10px;
+        font: inherit;
+        font-size: 1.4rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .names-dialog button:hover {
+        background-color: rgb(146, 255, 146);
+      }
+
+      @media screen and (max-width: 600px) {
+        .names-dialog {
+          top: 100px;
+        }
+        .names-dialog form {
+          row-gap: 40px;
+          grid-template-columns: 1fr;
+        }
+        .names-dialog p.title {
+          font-size: clamp(1.5rem, 8vw, 2.2rem);
+        }
+        .names-dialog button {
+          padding-inline: 60px;
+          font-size: 1.2rem;
+        }
+      }
+
+      /* FOOTER */
+
+      footer {
+        position: absolute;
+        bottom: 15px;
+        width: 100%;
+        text-align: center;
+        color: black;
+        font-size: var(--FOOTER-FS);
+        user-select: text;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Tic Tac Toe</h1>
+    </header>
+
+    <main>
+      <p>Turn</p>
+      <div class="gameboard">
+        <div class="gamecell" data-position="0"></div>
+        <div class="gamecell" data-position="1"></div>
+        <div class="gamecell" data-position="2"></div>
+        <div class="gamecell" data-position="3"></div>
+        <div class="gamecell" data-position="4"></div>
+        <div class="gamecell" data-position="5"></div>
+        <div class="gamecell" data-position="6"></div>
+        <div class="gamecell" data-position="7"></div>
+        <div class="gamecell" data-position="8"></div>
+      </div>
+      <button type="button">Reset</button>
+    </main>
+
+    <dialog class="names-dialog">
+      <form>
+        <p class="title">Let's start the game!</p>
+        <p class="player-name">
+          <label for="name1">Player 1's Name:</label>
+          <input type="text" name="name1" id="name1" maxlength="15" required />
+        </p>
+        <p class="player-name">
+          <label for="name2">Player 2's Name:</label>
+          <input type="text" name="name2" id="name2" maxlength="15" required />
+        </p>
+        <button>Confirm</button>
+      </form>
+    </dialog>
+
+    <dialog class="result-dialog">
+      <h1>Player X Wins!</h1>
+    </dialog>
+
+    <footer>
+      <p>Made by Marc Frances</p>
+    </footer>
+
+    <script>
+      const gameCells = document.querySelectorAll(".gamecell");
+      const resetButton = document.querySelector("main button");
+
+      const namesDialog = document.querySelector(".names-dialog");
+      const namesDialogButton = namesDialog.querySelector("button");
+
+      const Player = (name, symbol) => {
+        const getSymbol = () => symbol;
+        const getName = () => name;
+        return { getSymbol, getName };
+      };
+
+      //Inicialization of Players
+      namesDialog.showModal();
+      namesDialogButton.addEventListener("click", (event) => {
+        const form = namesDialog.querySelector("form");
+        const player1Name = form.querySelector("#name1");
+        const player2Name = form.querySelector("#name2");
+        if (form.checkValidity()) {
+          event.preventDefault(); // Don't want to submit this form
+          const player1 = Player(player1Name.value, "X");
+          const player2 = Player(player2Name.value, "O");
+          namesDialog.close();
+          gameInitialization(player1, player2);
+        }
+      });
+
+      //Game Initialization after player names being chosen
+      function gameInitialization(player1, player2) {
+        const gameBoard = (() => {
+          let gameBoardArray = [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ];
+
+          const addToArray = (symbol, position) => {
+            gameBoardArray[position] = symbol;
+          };
+
+          const clearArray = () => {
+            gameBoardArray = [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+            ];
+          };
+
+          const getGameBoardRows = () => {
+            const copyGameArray = [...gameBoardArray];
+            const res = [];
+            for (let i = 0; i < gameBoardArray.length / 3; i++) {
+              res.push(copyGameArray.splice(0, 3));
+            }
+            return res;
+          };
+
+          const getGameBoardColumns = () => {
+            const copyGameArray = [...gameBoardArray];
+            const res = [[], [], []];
+            for (let i = 0; i < gameBoardArray.length; i++) {
+              if (i % 3 === 0) {
+                res[0].push(copyGameArray[i]);
+              } else if (i % 3 === 1) {
+                res[1].push(copyGameArray[i]);
+              } else {
+                res[2].push(copyGameArray[i]);
+              }
+            }
+            return res;
+          };
+
+          const getGameBoardDiagonals = () => {
+            const copyGameArray = [...gameBoardArray];
+            const diagonal1 = [
+              copyGameArray[0],
+              copyGameArray[4],
+              copyGameArray[8],
+            ];
+            const diagonal2 = [
+              copyGameArray[2],
+              copyGameArray[4],
+              copyGameArray[6],
+            ];
+            return [diagonal1, diagonal2];
+          };
+
+          const areItemsOfArrayEqual = (arr) => {
+            const res = {
+              areItemsEqual: null,
+              winnerSymbol: "",
+            };
+            for (let i = 0; i < arr.length - 1; i++) {
+              if (arr[i] !== arr[i + 1] || arr[i] === null) {
+                res.areItemsEqual = false;
+                return res;
+              }
+            }
+            res.areItemsEqual = true;
+            res.winnerSymbol = arr[0];
+            return res;
+          };
+
+          const checkWinner = () => {
+            const gameRows = getGameBoardRows();
+            const gameColumns = getGameBoardColumns();
+            const gameDiagonals = getGameBoardDiagonals();
+            const gameCombinations = [
+              ...gameRows,
+              ...gameColumns,
+              ...gameDiagonals,
+            ];
+
+            const result = {
+              hasSomeoneWon: false,
+              tie: false,
+              winnerSymbol: "",
+            };
+
+            //Checks if there is a winner
+            for (let i = 0; i < gameCombinations.length; i++) {
+              const localRes = areItemsOfArrayEqual(gameCombinations[i]);
+              if (localRes.areItemsEqual) {
+                result.hasSomeoneWon = true;
+                result.winnerSymbol = localRes.winnerSymbol;
+                return result;
+              }
+            }
+
+            //Checks tie
+            if (!gameBoardArray.includes(null)) {
+              result.tie = true;
+              return result;
+            }
+
+            return result;
+          };
+
+          return { addToArray, clearArray, checkWinner };
+        })();
+
+        const displayController = (() => {
+          const playerTurnTitle = document.querySelector("main p");
+          const winnerDialog = document.querySelector(".result-dialog");
+          const winnerDialogMessage = winnerDialog.querySelector("h1");
+
+          // Close dialog when click outside form
+          winnerDialog.addEventListener("click", (event) => {
+            if (event.target === winnerDialog) {
+              winnerDialog.close();
+            }
+          });
+
+          const addPlayerSymbol = (target, symbol) => {
+            target.textContent = symbol;
+          };
+
+          const changePlayerTurnTitle = (message) => {
+            playerTurnTitle.textContent = message;
+          };
+
+          const showResultDialog = (message) => {
+            winnerDialogMessage.textContent = message;
+            winnerDialog.showModal();
+          };
+
+          const cleanGameboard = () => {
+            gameCells.forEach((cell) => {
+              cell.textContent = "";
+            });
+          };
+
+          return {
+            addPlayerSymbol,
+            changePlayerTurnTitle,
+            showResultDialog,
+            cleanGameboard,
+          };
+        })();
+
+        const game = ((firstPlayer, secondPlayer) => {
+          let currentPlayer = firstPlayer;
+          let gameEnded = false;
+
+          //Initialization of PlayerTurnTitle
+          displayController.changePlayerTurnTitle(
+            `${currentPlayer.getName()}'s Turn`
+          );
+
+          const makePlayerMove = (cell, player) => {
+            if (cell.textContent !== "") return true;
+
+            displayController.addPlayerSymbol(cell, player.getSymbol());
+            gameBoard.addToArray(player.getSymbol(), cell.dataset.position);
+            return false;
+          };
+
+          const parseSymbolToPlayer = (symbol, player1, player2) => {
+            switch (symbol) {
+              case player1.getSymbol():
+                return player1;
+
+              case player2.getSymbol():
+                return player2;
+
+              default:
+                throw new Error("Invalid symbol provided");
+            }
+          };
+
+          const processGameResult = (player1, player2) => {
+            const res = { gameEnded: false };
+
+            const winnerObj = gameBoard.checkWinner();
+            if (winnerObj.hasSomeoneWon) {
+              const winnerPlayer = parseSymbolToPlayer(
+                winnerObj.winnerSymbol,
+                player1,
+                player2
+              );
+              const message = `${winnerPlayer.getName()} Wins!`;
+              displayController.showResultDialog(message);
+              res.gameEnded = true;
+            } else if (winnerObj.tie) {
+              const message = `It's a Tie`;
+              displayController.showResultDialog(message);
+              res.gameEnded = true;
+            }
+
+            return res;
+          };
+
+          const changePlayerTurn = () => {
+            currentPlayer =
+              currentPlayer === firstPlayer ? secondPlayer : firstPlayer;
+            const message = gameEnded
+              ? "Game End"
+              : `${currentPlayer.getName()}'s Turn`;
+            displayController.changePlayerTurnTitle(message);
+          };
+
+          const doPlayerTurn = function (e) {
+            if (gameEnded) return;
+
+            const isCellTaken = makePlayerMove(e.target, currentPlayer);
+            if (isCellTaken) return;
+
+            const result = processGameResult(firstPlayer, secondPlayer);
+            gameEnded = result.gameEnded;
+            changePlayerTurn();
+          };
+
+          const cleanGame = function () {
+            displayController.cleanGameboard();
+            gameBoard.clearArray();
+            displayController.changePlayerTurnTitle(
+              `${currentPlayer.getName()}'s Turn`
+            );
+            gameEnded = false;
+          };
+
+          return { doPlayerTurn, cleanGame };
+        })(player1, player2);
+
+        resetButton.addEventListener("click", game.cleanGame);
+
+        gameCells.forEach((cell) => {
+          cell.addEventListener("click", game.doPlayerTurn);
+        });
+      }
+    </script>
+  </body>
+</html>

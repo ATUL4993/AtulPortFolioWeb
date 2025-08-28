@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <style>
+      /* Reset and base styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f4f4f4;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Container styles */
+      .container {
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+      }
+
+      /* Calculator styles */
+      .calc {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      /* Display area */
+      #input {
+        background-color: #f0f0f0;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 28px;
+        text-align: right;
+        /* min-height: 60px; */
+        /* word-wrap: break-word; */
+        overflow: hidden;
+        /* overflow-x: auto;  */
+      }
+
+      /* Button rows */
+      .calc div {
+        display: flex;
+        gap: 15px;
+      }
+
+      /* Common button styles */
+      button {
+        flex: 1;
+        padding: 20px;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        background-color: #e0e0e0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      button:hover {
+        background-color: #d5d5d5;
+      }
+
+      button:active {
+        background-color: #c4c4c4;
+      }
+
+      /* Special button styles */
+      .dgn {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .dgn:hover {
+        background-color: #45a049;
+      }
+
+      .dgn:active {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="calc">
+        <h1 id="input"></h1>
+        <div>
+          <button class="dgn">C</button>
+          <button class="dgn">&</button>
+          <button class="dgn">%</button>
+          <button class="dgn">/</button>
+        </div>
+        <div>
+          <button>7</button>
+          <button>8</button>
+          <button>9</button>
+          <button class="dgn">*</button>
+        </div>
+        <div>
+          <button>4</button>
+          <button>5</button>
+          <button>6</button>
+          <button class="dgn">-</button>
+        </div>
+        <div>
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+          <button class="dgn">+</button>
+        </div>
+        <div>
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+          <button class="dgn">+</button>
+        </div>
+        <div>
+          <button>0</button>
+          <button>00</button>
+          <button>.</button>
+          <button class="dgn">=</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      let input = document.getElementById("input");
+      let button = document.querySelectorAll("button");
+
+      button.forEach((element) => {
+        element.addEventListener("click", (e) => {
+          console.log(e.target.textContent);
+
+          if (e.target.textContent === "C") {
+            input.innerText = "";
+          } else if (e.target.textContent === "&") {
+            // slice for it is remove the last no of input oth no remove 1 ex 123 after slice it is 12
+            input.innerText = input.textContent.slice(0, -1);
+          } else if (e.target.textContent === "=") {
+            // eval coverts the string to no.
+            input.innerText = eval(input.innerText);
+          } else {
+            input.innerText += e.target.textContent;
+          }
+          input.scrollLeft = input.scrollWidth;
+        });
+      });
+    </script>
+  </body>
+</html>

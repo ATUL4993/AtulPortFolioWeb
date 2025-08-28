@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Projects Section</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0b0b0b;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .projects {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+
+    .projects h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      color: #00bfff;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .box {
+      background-color: #043d74;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .inner-box {
+      position: relative;
+      height: 250px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .inner-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s ease;
+    }
+
+    .inner-box:hover .overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .project-icons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .project-icons a {
+      font-size: 30px;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 50%;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .project-icons a:hover {
+      background-color: #00bfff;
+      color: #000;
+    }
+
+    @media (max-width: 992px) {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<section class="projects">
+  <h2>My Projects</h2>
+  <div class="grid-container">
+
+    <!-- Project 1 -->
+    <div class="box">
+      <div class="inner-box">
+        <img src="images/calc2.jpg" alt="Project 1">
+        <div class="overlay">
+          <div class="project-icons">
+            <a href="https://live-site-1.com" target="_blank"><i class="fas fa-globe"></i></a>
+            <a href="https://github.com/youruser/project1" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="box">
+      <div class="inner-box">
+        <img src="images/screencapture-127-0-0-1-5504-index-html-2025-07-27-19_28_04.png" alt="Project 2">
+        <div class="overlay">
+          <div class="project-icons">
+            <a href="https://live-site-2.com" target="_blank"><i class="fas fa-globe"></i></a>
+            <a href="https://github.com/youruser/project2" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="box">
+      <div class="inner-box">
+        <img src="images/calc2.jpg" alt="Project 3">
+        <div class="overlay">
+          <div class="project-icons">
+            <a href="https://live-site-3.com" target="_blank"><i class="fas fa-globe"></i></a>
+            <a href="https://github.com/youruser/project3" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 4 -->
+    <div class="box">
+      <div class="inner-box">
+        <img src="images/calc2.jpg" alt="Project 4">
+        <div class="overlay">
+          <div class="project-icons">
+            <a href="https://live-site-4.com" target="_blank"><i class="fas fa-globe"></i></a>
+            <a href="https://github.com/youruser/project4" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 5 -->
+    <div class="box">
+      <div class="inner-box">
+        <img src="images/calc2.jpg" alt="Project 5">
+        <div class="overlay">
+          <div class="project-icons">
+            <a href="https://live-site-5.com" target="_blank"><i class="fas fa-globe"></i></a>
+            <a href="https://github.com/youruser/project5" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 6 -->
+    <div class="box">
+      <div class="inner-box">
+        <img src="images/calc2.jpg" alt="Project 6">
+        <div class="overlay">
+          <div class="project-icons">
+            <a href="https://live-site-6.com" target="_blank"><i class="fas fa-globe"></i></a>
+            <a href="https://github.com/youruser/project6" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>
